@@ -30,7 +30,7 @@ Class UserController extends Controller {
         $this->validate($request,$rules);
 
         $user = User::create($request->all());
-        return response()->json($user, 200);
+        return $this->successResponse($user);
     }
     
     public function updateUser(Request $request, $id) { //UPDATE USER
@@ -50,7 +50,7 @@ Class UserController extends Controller {
             change", 403);
         } else {
             $user->save();
-            return response()->json($user, 200);
+            return $this->successResponse($user);
         }
     }
 
@@ -59,22 +59,13 @@ Class UserController extends Controller {
     
         $user->delete();
     
-        return response()->json($user, 200);
+        return $this->successResponse($user);
     }
 
     public function show($id){
  
-    $user = User::where('id', $id)->first();
-    if($user){
-        return $this->successResponse($user);
-    }
-    {
-        return response()->json('User ID Does Not Exists');
-    }
-    
+    $user = User::findOrFail($id);
+    return $this->successResponse($user);
     }
 
-    
 }
-
-
